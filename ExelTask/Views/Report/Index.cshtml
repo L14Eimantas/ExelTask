@@ -1,0 +1,71 @@
+﻿@model IEnumerable<ExelTask.Models.History>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Mapping.MappingName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Mapping.ClieantName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RanBy)
+        </th>
+        <th>
+           Input Files
+        </th>
+        <th>
+            Output Files
+        </th>
+        <th>
+            Run Date
+        </th>
+        <th>
+            Run Time
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Mapping.MappingName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Mapping.ClieantName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RanBy)
+        </td>
+        <td>
+            @Html.ActionLink("Download", "InputFiles", "Zip", new { mId = item.MappingId }, new { @class = "btn btn-default" })
+        </td>
+        <td>
+            @Html.ActionLink("Download", "OutputFiles", "Zip", new { mId = item.MappingId }, new { @class = "btn btn-default" })
+        </td>
+        <td>
+            @{
+               string date = item.Date.ToString("d");
+               string time = item.Date.ToString("t");
+            }
+            @date
+        </td>
+        <td>
+            @time
+        </td>
+    </tr>
+}
+
+</table>

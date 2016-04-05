@@ -1,0 +1,19 @@
+﻿  table, th, td {
+        border: 2px solid #f3f1f1;
+        border-collapse: collapse;
+        padding: 8px;
+        text-align: left;
+        vertical-align: top;
+    }
+
+  div.inputView{
+        height:400px;
+        width:250px;
+        text-overflow:ellipsis; 
+        overflow:auto;
+        table-layout: fixed;
+  }
+
+
+
+

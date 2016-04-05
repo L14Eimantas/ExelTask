@@ -1,0 +1,75 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<ExelTask.Models.Mapping>  
+           @*enables use Mapping model
+       IEnumerable change to IpagedList, because Index method return pagedlist
+        *@ 
+
+@{
+    ViewBag.Title = "Index";
+}
+<script src="~/Scripts/jquery-2.1.4.min.js"></script>
+<h2>Index</h2>
+        <a href='@Url.Action("Create","Mapping" )'>
+            <input type="submit"  value="Add New Mapping"  class=" btn btn-default">
+        </a>
+    @*<p class="btn btn-default">
+            @Html.ActionLink("Add New Mapping", "Create" )
+        </p>*@
+    <table class="table">
+        <tr>
+            <th>
+                Actions
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().MappingName)  @*model.MappingName change to model.First().MappingName (pagedlist)*@
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().ClieantName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().ModuleName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Tags)
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                <td>
+                    @Html.DisplayFor(modelItem => item.MappingName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClieantName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModuleName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tags)
+                </td>
+            </tr>
+        }
+
+    </table>
+
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions() {
+         DisplayPageCountAndCurrentLocation=true, DisplayItemSliceAndTotal=true})
+        @using (Html.BeginForm("Index", "Mapping", FormMethod.Get))
+        {
+      @Html.DropDownList("PageSize", new List<SelectListItem>{
+      new SelectListItem{Text="1", Value="1"},
+      new SelectListItem{Text="2", Value="2"},
+      new SelectListItem{Text="3", Value="3"},
+      new SelectListItem{Text="4", Value="4"},
+      new SelectListItem{Text="5", Value="5"},
+      new SelectListItem{Text="6", Value="6"},
+      new SelectListItem{Text="7", Value="7"}
+     }, new { @class = "btn btn-default dropdown-toggle", onchange = "document.forms[0].submit();" })
+            <text>items per pages</text>
+        }

@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>SpreadsheetGear2012.Drawing</name>
+  </assembly>
+  <members>
+    <member name="T:SpreadsheetGear.Drawing.Color">
+      <summary>
+            Represents a Color in the SpreadsheetGear GDI+ drawing engine and provides implicit 
+            conversion operators to and from SpreadsheetGear.Color and System.Drawing.Color as well
+            as static converters between SpreadsheetGear.Color and System.Drawing.Color.
+            </summary>
+      <example>
+            This example demonstrates converting between Color types and requires references to:<br />
+                SpreadsheetGear2012.Core.dll<br />
+                SpreadsheetGear2012.Drawing.dll<br />
+                System.Drawing.dll
+            <code title="Example" description="" lang="CS">
+            // Get a new SpreadsheetGear.Color from the readonly list of colors in SpreadsheetGear.Colors
+            SpreadsheetGear.Color sgColor = SpreadsheetGear.Colors.Navy;
+            // Use the SpreadsheetGear.Drawing.Color implicit converters to
+            // get instances of SpreadsheetGear.Drawing.Color and System.Drawing.Color.
+            SpreadsheetGear.Drawing.Color sgDrawingColor = sgColor;
+            System.Drawing.Color systemColor = sgDrawingColor;
+            // Use the implicit converters to go the other way.
+            SpreadsheetGear.Drawing.Color sgDrawingColor2 = systemColor;
+            SpreadsheetGear.Color sgColor2 = sgDrawingColor2;
+            // Use the static converters between SpreadsheetGear.Color and System.Drawing.Color
+            SpreadsheetGear.Drawing.Color sgColor3 = SpreadsheetGear.Drawing.Color.GetSpreadsheetGearColor(systemColor);
+            System.Drawing.Color systemColor2 = SpreadsheetGear.Drawing.Color.GetDrawingColor(sgColor);
+            Console.WriteLine(" sgColor ={0}\r\n sgColor2s{1}\r\n sgColor3={2}", sgColor, sgColor2, sgColor3);
+            Console.WriteLine(" sgDrawingColor ={0}\r\n sgDrawingColor2s{1}", sgDrawingColor, sgDrawingColor2);
+            Console.WriteLine(" systemColor ={0}\r\n systemColor2s{1}", systemColor, systemColor2);</code></example>
+    </member>
+    <member name="T:SpreadsheetGear.Drawing.Image">
+      <summary>
+            A class which provides the ability to draw a range of cells, or a shape such as a
+            chart.
+            </summary>
+    </member>
+    <member name="M:SpreadsheetGear.Drawing.Image.GetBitmap">
+      <summary>
+            Creates and returns a new bitmap image of the represented
+            range or shape using <strong>PixelFormat.Format32bppArgb</strong>.
+            </summary>
+      <returns>A new bitmap image of the represented
+            range or shape using <strong>PixelFormat.Format32bppArgb</strong>.</returns>
+    </member>
+    <member name="M:SpreadsheetGear.Drawing.Image.GetBitmap(System.Drawing.Imaging.PixelFormat)">
+      <summary>
+            Creates and returns a new bitmap image of the represented
+            range or shape using the specified pixel format.
+            </summary>
+      <param name="pixelFormat">Specifies the pixel format to use when creating the bitmap.</param>
+      <returns>A new bitmap image of the represented
+            range or shape using the specified pixel format.</returns>
+    </member>
+    <member name="M:SpreadsheetGear.Drawing.Image.GetSize">
+      <summary>
+            Returns the size in screen pixels required to draw the represented range or shape.
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:SpreadsheetGear.Drawing.Image.GetSize(System.Drawing.Graphics)">
+      <summary>
+            Returns the size in device units for the specified GDI+ drawing surface required to draw the
+            represented range or shape.
+            </summary>
+      <param name="graphics">Specifies the GDI+ drawing surface whose device units and font metrics
+            will be used to determine the size required to draw the represented range or shape.</param>
+      <returns>The size in device units for the specified GDI+ drawing surface required to draw the
+            represented range or shape.</returns>
+    </member>
+    <member name="M:SpreadsheetGear.Drawing.Image.Draw(System.Drawing.Graphics,System.Drawing.Rectangle)">
+      <summary>
+            Draws the represented range or shape to the specified GDI+ drawing surface at the
+            specified location and with the specified size.
+            </summary>
+      <param name="graphics">Specifies the GDI+ drawing surface to draw to.</param>
+      <param name="destRect">Specifies the location and size to draw to (the size of this rectangle must match the size returned by <strong>GetSize</strong>).</param>
+    </member>
+    <member name="M:SpreadsheetGear.Drawing.Image.GetImage(SpreadsheetGear.Shapes.IPictureFormat)">
+      <summary>
+            Returns a System.Drawing.Image from the specified picture format or null
+            if there is no image. The caller is responsible to dispose the image.
+            </summary>
+    </member>
+    <member name="M:SpreadsheetGear.Drawing.Image.#ctor(SpreadsheetGear.IRange)">
+      <summary>
+                Initializes a new instance of the <strong>Image</strong> class which will be used
+                to draw the specified range of cells.
+            </summary>
+      <param name="range">
+                Specifies the range which will be drawn.
+            </param>
+    </member>
+    <member name="M:SpreadsheetGear.Drawing.Image.#ctor(SpreadsheetGear.Shapes.IShape)">
+      <summary>
+                Initializes a new instance of the <strong>Image</strong> class which will be used
+                to draw the specified shape.
+            </summary>
+      <param name="shape">
+                Specifies the shape which will be drawn.
+            </param>
+    </member>
+    <member name="M:SpreadsheetGear.Drawing.Image.#ctor(SpreadsheetGear.Charts.IChart)">
+      <summary>
+                Initializes a new instance of the <strong>Image</strong> class which will be used
+                to draw the specified chart.
+            </summary>
+      <param name="chart">
+                Specifies the chart which will be drawn.
+            </param>
+    </member>
+    <member name="P:SpreadsheetGear.Drawing.Image.BackgroundBrush">
+      <summary>
+            Gets or sets the property which specifies the background brush to use for the image.
+            </summary>
+      <remarks>
+                This brush has meaning in cases where ranges and shapes use fills and lines
+                that include some level of transparency.  The calling application is responsible 
+                for any necessary disposal of the brush passed to this property.
+            </remarks>
+    </member>
+  </members>
+</doc>

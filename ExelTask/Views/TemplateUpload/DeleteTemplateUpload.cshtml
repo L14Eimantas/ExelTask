@@ -1,0 +1,31 @@
+﻿@model ExelTask.Models.Workbook
+
+@{
+    ViewBag.Title = "DeleteUpload";
+}
+
+<h2>Delete Template Upload File</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkbookName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WorkbookName)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-actions no-color">
+            @Html.ActionLink("Cancel", "Index","TemplateUpload" ,new { id = Model.MappingId }, new { @class = " btn btn-default" })
+            <input type="submit" value="Delete" class="btn btn-default" />
+        </div>
+    }
+</div>
+

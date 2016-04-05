@@ -1,0 +1,222 @@
+﻿@model ExelTask.ViewModel.ActionColumnModel
+@{
+    ViewBag.Title = "MainPageColumn";
+}
+
+<script src="~/Scripts/jquery-2.1.4.min.js"></script> @*this is important because is need for jquery drag and drop*@
+<script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+<link href="~/CSS_CODE/ActionTable.css" rel="stylesheet" />
+<input type="hidden" id="customInput" value=@ViewBag.num />
+
+
+<h2>Main Page Column</h2>
+
+<h3>Drag inputs into the output templates</h3>
+
+<link href="~/CSS_CODE/ColumnPageTable.css" rel="stylesheet" />
+
+<table style="width:1150px; height:400px">
+    <tr>
+        <th style="width:250px; background-color:#f3f1f1;">Input Files</th>
+        <th colspan="2" style="background-color:#89e69f; color:black; ">Output Templates</th>
+    </tr>
+    <tr>
+        <th rowspan="2">
+            @*Input Files place*@
+            <div class="inputView">
+                <div class="container">
+                    @for (int i = 0; i < Model.InputWorkbook.Count; i++)
+                    {
+                        string a = "#demo" + Model.InputWorkbook[i].Id.ToString();//div id
+                        <button type="button" class="btn btn-lol" data-toggle="collapse" data-target=@a>@Model.InputWorkbook[i].WorkbookName</button>
+                        <br />
+                        string b = a.Remove(0, 1); //remove # char
+                        <div id=@b class="collapse">
+                            @for (int j = 0; j < Model.InputSheet.Count; j++)
+                            {
+                                string c = "#demo" + Model.InputWorkbook[i].Id.ToString() + Model.InputSheet[j].Id.ToString();// c is new target id
+                                if (Model.InputWorkbook[i].Id == Model.InputSheet[j].WorkbookId)
+                                {
+                                    <button type="button" class="btn btn-default1" data-toggle="collapse" data-target=@c>@Model.InputSheet[j].WorksheetName</button>
+                                    <br />
+                                }
+                                string cc = c.Remove(0, 1);//remove # char, because id= dont have #
+                                <div id=@cc class="collapse">
+                                    @for (int k = 0; k < Model.InputCell.Count; k++)
+                                    {
+                                        if (Model.InputCell[k].WorksheetId == Model.InputSheet[j].Id)
+                                        {
+                                            // id = "allow" means that can only move this button this id goes to jquery function
+                                            <button id="allow" type="button" value=@Model.InputCell[k].Id class="btn btn-danger1">@Model.InputCell[k].ColumnName</button>
+                                            <br />
+                                        }
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </th>
+        <th rowspan="2">
+            @* MIDDLE *@    @*Middle is connected  to Last table column. Middle id target is in last column *@
+            <div style="width:650px">
+                <div class="container">
+                    @for (int i = 0; i < Model.TemplateWorkbook.Count; i++)
+                    {
+                        string a = "#demo" + Model.TemplateWorkbook[i].Id.ToString() + 'a';
+                        <div style="width:200px; height:34px;"></div>
+
+                        string b = a.Remove(0, 1);
+
+                        <div id=@b class="collapse">
+                            @for (int j = 0; j < Model.TemplateSheet.Count; j++)
+                            {
+                                string c = "#demo" + Model.TemplateWorkbook[i].Id.ToString() + Model.TemplateSheet[j].Id.ToString() + 'a';
+                                if (Model.TemplateWorkbook[i].Id == Model.TemplateSheet[j].WorkbookId)
+                                {
+                                    <div style="width:200px; height:34px;"></div>
+                                }
+                                string cc = c.Remove(0, 1);
+                                <div id=@cc class="collapse">
+                                    @for (int k = 0; k < Model.TemplateCell.Count; k++)
+                                    {
+                                        if (Model.TemplateCell[k].WorksheetId == Model.TemplateSheet[j].Id)
+                                        {
+                                            <div id=@Model.TemplateCell[k].Id class="dropme" style="overflow-y:auto ;width:610px; height:34px; text-align:center;">
+
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </th>
+        <th>
+            @*Templates Files Place*@
+            <div style="width:250px">
+                <div class="container">
+                    @for (int i = 0; i < Model.TemplateWorkbook.Count; i++)
+                    {
+                        string a = "#demo" + Model.TemplateWorkbook[i].Id.ToString(); // target
+                        string aa = a + "," + a + 'a'; // this done multi target (because it have middle column id) + 'a' means that is it middle column id
+                        <button type="button" class="btn btn-lol" data-toggle="collapse" data-target=@aa>@Model.TemplateWorkbook[i].WorkbookName</button>
+                        <br />
+
+                        string b = a.Remove(0, 1);
+
+                        <div id=@b class="collapse">
+                            @for (int j = 0; j < Model.TemplateSheet.Count; j++)
+                            {
+                                string c = "#demo" + Model.TemplateWorkbook[i].Id.ToString() + Model.TemplateSheet[j].Id.ToString();
+                                string ca = c + ',' + c + 'a';// this done multi target (because it have middle column id)
+                                if (Model.TemplateWorkbook[i].Id == Model.TemplateSheet[j].WorkbookId)
+                                {
+                                    <button type="button" class="btn btn-default1" data-toggle="collapse" data-target=@ca>@Model.TemplateSheet[j].WorksheetName</button>
+                                    <br />
+                                }
+                                string cc = c.Remove(0, 1);
+                                <div id=@cc class="collapse">
+                                    @for (int k = 0; k < Model.TemplateCell.Count; k++)
+                                    {
+                                        if (Model.TemplateCell[k].WorksheetId == Model.TemplateSheet[j].Id)
+                                        {
+                                            @*<button type="button" class="btn btn-danger1">@Model.AllCell[k].ColumnName</button>*@
+                                            @Html.ActionLink(@Model.TemplateCell[k].ColumnName, "Index", "CustomFormula", new { mId = Model.TemplateWorkbook[i].MappingId, workbook = Model.TemplateWorkbook[i].WorkbookName, worksheet = Model.TemplateSheet[j].WorksheetName, cell = Model.TemplateCell[k].ColumnName, whereCopy = Model.TemplateCell[k].Id }, new { @class = "btn btn-danger1" });
+                                        <br />
+                                        }
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </th>
+    </tr>
+</table>
+
+
+
+<h5>
+    @Html.ActionLink("Go Back", "Index", "TemplateUpload", null, new { @class = "btn btn-default" })
+</h5>
+
+
+<h6>
+
+    @Html.ActionLink("RUN", "Index", "Run", new { mId = Model.InputWorkbook[0].MappingId }, new { @id = "runclick", @class = "btn btn-default" })
+</h6>
+
+
+<script src="~/JavaScript/DragAndDrop25.js"></script>
+<style>
+      button.btn-default { /*{   http://blog.koalite.com/bbg/ spalvu generatorius
+    color: #000000;
+    background-color: #E6F2EA;
+    border-color: #85B898;*/
+          position: relative;
+          top: 1px;
+          bottom: -20px;
+          Right: -10px;
+      }
+
+      .btn-danger1 {
+          color: #000000;
+          background-color: #C4CFF5;
+          border-color: #606EF0;
+          position: relative;
+          top: 2px;
+          /*bottom: 30px;*/
+          Right: -20px;
+      }
+
+      li.btn-danger2 {
+          color: #000000;
+          background-color: #C4CFF5;
+          border-color: #606EF0;
+          /*position: relative;
+      top: 4px;
+      /*bottom: 30px;*/
+          /*Right: -20px;*/
+      }
+
+      button.btn-lol {
+          color: #000000;
+          background-color: #5678F5;
+          border-color: #606EF0;
+      }
+
+      button.btn-default1 {
+          position: relative;
+          top: 1px;
+          bottom: -20px;
+          Right: -10px;
+          color: #000000;
+          background-color: #94A8F2;
+          border-color: #606EF0;
+      }
+
+
+      h5 {
+          float: left;
+      }
+
+      h6 {
+          float: right;
+      }
+      .highlight
+      {
+          background-color:#f3f1f1;
+      }
+</style>
+
+
+
+
+

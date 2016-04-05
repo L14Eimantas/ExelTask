@@ -1,0 +1,128 @@
+﻿@model ExelTask.ViewModel.FileUploadModel
+@{
+    ViewBag.Title = "Upload Template File";
+}
+
+<h2>Upload a Template File</h2>
+@using (Html.BeginForm("TemplateUpload", "TemplateUpload", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" class="btn btn-warning" />
+    <input type="submit" value="Upload" class="btn btn-default" />
+}
+@* WORKBOOK SECTION *@
+<hr />
+<table class="table">
+    WORKBOOKS :
+    @foreach (var item in Model.requiredWorkbook)
+    {
+        <tr>
+            &nbsp
+            <p style="display:inline-block">
+                <a href='@Url.Action("Index","TemplateUpload",new {id=item.MappingId, WBid=item.Id})'>
+                    @if (item.Id == ViewBag.WorkbookSelect)
+                    {
+                        <input type="button" value=@item.WorkbookName class="btn btn-primary active">}
+                    else
+                    {
+                        <input type="button" value=@item.WorkbookName class="btn btn-info">
+                    }
+                </a>
+                <a href='@Url.Action("DeleteTemplateUpload", "TemplateUpload", new {id=item.Id})'>
+                    <input type="image" src="~/Image/x.png" alt="submit" align="right">
+                </a>
+            </p>
+        </tr>
+    }
+</table>
+<hr />
+
+@* //////////////////////////////////////////////// *@
+@*    WORKSHEET SECTION     *@
+@if (ViewBag.WorkbookSelect != null)
+{
+    <table class="table">
+        WORKSHEET:
+        @foreach (var item in Model.requiredWorksheet)
+        {
+            <tr>
+                @if (ViewBag.WorksheetSelect == item.Id)
+                {
+                    string name = item.WorksheetName;
+                    @Html.ActionLink(name, "Index", null, new { WBid = ViewBag.WorkbookSelect, WSid = item.Id }, new { @class = "btn btn-primary active" })
+                    @*  @Html.ActionLink( name, "EditCell", null, new { id = item.Id}, new {@class="btn btn-info"}) later change all this  *@
+                }
+                else
+                {
+                    string name = item.WorksheetName;
+                    @Html.ActionLink(name, "Index", null, new { WBid = ViewBag.WorkbookSelect, WSid = item.Id }, new { @class = "btn btn-info" })
+                }
+            </tr>
+        }
+    </table>
+}
+    @* ---------------------------------CELL SECTION -----------------------------------*@
+
+    @if (ViewBag.WorksheetSelect != null)
+    {
+        <a href='@Url.Action("ViewWorksheet", "TemplateUpload", new {sheetId=Model.requiredCell.First().WorksheetId })' target="_blank">
+            <input type="image" src="~/Image/preview.png" alt="submit" />
+        </a>
+    }
+    @using (Html.BeginForm("Index", "TemplateUpload", new { WBid = ViewBag.WorkbookSelect, WSid = ViewBag.WorksheetSelect }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <table class="table">
+            <tr>
+                @if (null != ViewBag.WorksheetSelect)
+                {
+                    <th>
+                        @Html.DisplayNameFor(model => model.requiredCell[0].ColumnName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.requiredCell[0].HeaderRow)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.requiredCell[0].StartRow)
+                    </th>
+                }
+            </tr>
+            @for (var i = 0; i < Model.requiredCell.Count; i++)
+            {
+                <tr>
+                    @Html.HiddenFor(x => x.requiredCell[i].Id) @*Without this Id is not saved and is equil zero*@
+                    @Html.HiddenFor(x => x.requiredCell[i].WorksheetId)
+                    <th>
+                        @Html.EditorFor(x => x.requiredCell[i].ColumnName, new { htmlAttributes = new { @class = "btn btn-default dropdown-toggle" } })
+                        @Html.ValidationMessageFor(x => x.requiredCell[i].ColumnName, "", new { @class = "text-danger" })
+                    </th>
+                    <th>
+                        @Html.EditorFor(x => x.requiredCell[i].HeaderRow, new { htmlAttributes = new { @class = "btn btn-default dropdown-toggle" } })
+                        @Html.ValidationMessageFor(x => x.requiredCell[i].HeaderRow, "", new { @class = "text-danger" })
+                    </th>
+                    <th>
+                        @Html.EditorFor(x => x.requiredCell[i].StartRow, new { htmlAttributes = new { @class = "btn btn-default dropdown-toggle" } })
+                        @Html.ValidationMessageFor(x => x.requiredCell[i].StartRow, "", new { @class = "text-danger" })
+                    </th>
+                </tr>
+            }
+        </table>
+        <div class="form-group">
+            @*this button (continue) should go to Template Controller Index method*@
+            @Html.ActionLink("Go Back", "UploadIndex", "Upload", null, new { @class = "btn btn-default" })
+            @if (ViewBag.WorksheetSelect != null) //buttun continue logic
+            {// in this case Continue pressing modify cell table data
+                <input type="submit" value="Continue" style="margin-left:75%" class="btn btn-default" />
+            }
+            else if (Model.requiredWorkbook.Any() && ViewBag.WorksheetSelect == null)
+            { 
+                @Html.ActionLink("Continue", "MainPageColumn", "ActionWithColumn", new {Id=Model.requiredWorkbook.First().MappingId }, new { @style = "margin-left:75%", @class = "btn btn-default" })
+            }
+            else //if workbooks dont exist continue button is disabled
+            {
+                <input type="submit" value="Continue" style="margin-left:75%" disabled class="btn btn-default" />
+            }
+            @*Cange to MainPageColumn *@
+
+        </div>
+    }

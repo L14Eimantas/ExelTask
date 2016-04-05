@@ -1,0 +1,119 @@
+﻿@model ExelTask.ViewModel.CustomFormulaData
+@{
+    ViewBag.Title = "CustomFormula";
+}
+<h2>Excal Custom Formula</h2>
+<h3>@ViewBag.Name</h3>
+
+
+<textarea id="hid" hidden>@ViewBag.String</textarea>
+<script src="~/Scripts/jquery-2.1.4.min.js"></script> @*this is important because is need for jquery drag and drop*@
+<script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+<link href="~/CSS_CODE/CustomTable2.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.highlighttextarea.min.js"></script>
+<link href="~/CSS_CODE/jquery.highlighttextarea.min.css" rel="stylesheet" />
+<table>
+<tr class="text">
+    <th>Input Files</th>
+    <th width="200px">Excel Formulas</th>
+    <th>Output</th>
+</tr>
+<tr>
+    <th>
+        <div class="hidme">
+        <div class="container">
+            @for (int i = 0; i < Model.InputWorkbook.Count; i++)
+            {
+                string a = "#demo" + Model.InputWorkbook[i].Id.ToString();//div id
+                <button type="button" class="btn btn-lol" data-toggle="collapse" data-target=@a>@Model.InputWorkbook[i].WorkbookName</button>
+                <br />
+                string b = a.Remove(0, 1); //remove # char
+                <div id=@b class="collapse">
+                    @for (int j = 0; j < Model.AllWorksheet.Count; j++)
+                    {
+                        string c = "#demo" + Model.InputWorkbook[i].Id.ToString() + Model.AllWorksheet[j].Id.ToString();// c is new target id
+                        if (Model.InputWorkbook[i].Id == Model.AllWorksheet[j].WorkbookId)
+                        {
+                            <button type="button" class="btn btn-default1" data-toggle="collapse" data-target=@c>@Model.AllWorksheet[j].WorksheetName</button>
+                            <br />
+                        }
+                        string cc = c.Remove(0, 1);//remove # char, because id= dont have #
+                        <div id=@cc class="collapse">
+                            @for (int k = 0; k < Model.AllCell.Count; k++)
+                            {
+                                if (Model.AllCell[k].WorksheetId == Model.AllWorksheet[j].Id)
+                                {
+                                    // id = "allow" means that can only move this button this id goes to jquery function
+                                    <button id="allow" type="button" value=@Model.AllCell[k].Id class="btn btn-danger1">@Model.AllCell[k].ColumnName</button>
+                                    <br />
+                                }
+                            }
+                        </div>
+                    }
+                </div>
+            }
+
+        </div>
+      </div>
+    </th>
+    <th>
+        @for (int i = 0; i < Model.ExcelFormula.Count; i++)
+        {
+            <button type="button" id="allow2" class="btn btn-danger1">@Model.ExcelFormula[i]</button>
+            <br />
+        }
+    </th>
+    <th>
+        <textarea id=@ViewBag.Where class="dropme" name=@Model.InputWorkbook[0].MappingId placeholder="Enter your custom formala..." rows="17" cols="80" style="border-width:0; font-weight:bold; font-size:15px; margin:0"></textarea>
+   
+    </th>
+</tr>
+    </table>
+
+<div id="answer" style="color:red; font-size:18px"></div>
+
+<div style="float:left">
+    @Html.ActionLink("Go Back", "MainPageColumn", "ActionWithColumn", new { mId = Model.InputWorkbook[0].MappingId }, new { @class = "btn btn-default" }) 
+</div>
+
+<div style="float:right">
+ <button id="test" class="btn btn-default" style="border-color:#ff6a00">Test Formula</button>
+ <button id="done" class="btn btn-default" style="border-color:green" disabled>Done</button>
+</div>
+
+
+<script src="~/JavaScript/CustomFormula.js"></script>
+
+
+<style>
+    .btn-danger1 {
+        color: #000000;
+        background-color: #C4CFF5;
+        border-color: #606EF0;
+        position: relative;
+        top: 2px;
+        /*bottom: 30px;*/
+        Right: -20px;
+    }
+    button.btn-lol {
+        color: #000000;
+        background-color: #5678F5;
+        border-color: #606EF0;
+    }
+    button.btn-default1 {
+        position: relative;
+        top: 1px;
+        bottom: -20px;
+        Right: -10px;
+        color: #000000;
+        background-color: #94A8F2;
+        border-color: #606EF0;
+    }
+  
+</style>
+
+
+
+
+
+
